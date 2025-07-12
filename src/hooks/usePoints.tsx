@@ -81,6 +81,7 @@ interface PointsContextType {
   activateClaimCode: (claimCode: string, walletPublicKey: string) => Promise<boolean>;
   fetchShadowAccounts: () => Promise<void>;
   redeemPoints: (request: RedemptionRequest) => Promise<boolean>;
+  connectUniversalPoints: (partnerId: string) => Promise<boolean>;
 }
 
 // Create the context
@@ -347,6 +348,46 @@ export const PointsProvider = ({ children }: PointsProviderProps) => {
     }
   };
 
+  // Connect to universal points system
+  const connectUniversalPoints = async (partnerId: string): Promise<boolean> => {
+    if (!user || !isInitialized) {
+      return false;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`${config.apiUrl}/universal/connect`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': config.apiKey,
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          partnerId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to connect to universal points system');
+      }
+
+      // Refresh balances and partners
+      await fetchBalances();
+      await fetchPartners();
+
+      return true;
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Failed to connect to universal points system');
+      console.error('Connect universal points error:', error);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const value = {
     isLoading,
     error,
@@ -362,6 +403,7 @@ export const PointsProvider = ({ children }: PointsProviderProps) => {
     activateClaimCode,
     fetchShadowAccounts,
     redeemPoints,
+    connectUniversalPoints,
   };
 
   return <PointsContext.Provider value={value}>{children}</PointsContext.Provider>;

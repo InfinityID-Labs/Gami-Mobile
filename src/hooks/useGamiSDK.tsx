@@ -83,8 +83,8 @@ export const GamiSDKProvider = ({ children }: GamiSDKProviderProps) => {
   const { user } = useAuth();
   const [config, setConfig] = useState<GamiSDKConfig>({
     apiKey: '',
-    apiUrl: 'https://api.gamiprotocol.com/api',
-    environment: 'development',
+    apiUrl: 'https://api.gamiprotocol.io/v1',
+    environment: 'production',
   });
   const [isInitialized, setIsInitialized] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);

@@ -7,6 +7,7 @@ import WalletScreen from '../screens/WalletScreen';
 import AchievementsScreen from '../screens/AchievementsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import RewardsScreen from '../screens/RewardsScreen';
+import ConnectUniversalPointsScreen from '../screens/ConnectUniversalPointsScreen';
 
 export type TabStackParamList = {
   Dashboard: undefined;
@@ -14,6 +15,7 @@ export type TabStackParamList = {
   Rewards: undefined;
   Achievements: undefined;
   Profile: undefined;
+  Connect: undefined;
 };
 
 const Tab = createBottomTabNavigator<TabStackParamList>();
@@ -35,6 +37,8 @@ const TabNavigator = () => {
             iconName = focused ? 'ios-trophy' : 'ios-trophy-outline';
           } else if (route.name === 'Profile') {
             iconName = focused ? 'ios-person' : 'ios-person-outline';
+          } else if (route.name === 'Connect') {
+            iconName = focused ? 'ios-link' : 'ios-link-outline';
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -80,6 +84,13 @@ const TabNavigator = () => {
         component={ProfileScreen} 
         options={{
           title: 'Profile'
+        }}
+      />
+      <Tab.Screen
+        name="Connect"
+        component={ConnectUniversalPointsScreen}
+        options={{
+          title: 'Connect Points'
         }}
       />
     </Tab.Navigator>
